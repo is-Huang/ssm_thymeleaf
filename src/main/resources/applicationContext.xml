@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 0、引入jdbc.properties文件 【classpath:文件名】 -->
+	<context:property-placeholder  location="classpath:jdbc.properties"/>
+	
+	<!-- 1、创建druid数据源 -->
+	<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName"  value="${jdbc.driver}"/>
+		<property name="url" 	value="${jdbc.url}" />
+		<property name="username" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${jdbc.maxActive}"/>
+	</bean>
+	
+	<!-- 2、创建SqlSessionFactoryBean对象:包含主配置文件和数据源 -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="druidDataSource"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+	</bean>
+	
+	<!-- 3、创建mybatis的代理对象（实现类）,类似于使用getMapper() 
+		不需要id,默认名称为：包中接口名首字母小写
+		StudentDao=====>studentDao
+	-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
+		<property name="basePackage" value="dev.huang.dao"/>
+	</bean>
+
+	<!-- 扫描@Service注解 -->
+	<context:component-scan base-package="dev.huang.service.impl"/>
+	
+</beans>

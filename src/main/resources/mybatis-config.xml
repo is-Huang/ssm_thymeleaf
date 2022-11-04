@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 可选的，设置日志信息（mybatis操作数据库时的详细信息显示） -->
+	<settings>
+		<setting name="logImpl" value="STDOUT_LOGGING"/>
+	</settings>
+	
+	<typeAliases>	
+		<!--批量定义别名，别名默认是类名（类名首字母的大写、小写随意）  -->
+		<package name="dev.huang.entity"  />
+	</typeAliases>
+	 
+	 <mappers>
+		<!--一次性指向所有的mapper映射文件 
+			要求：1、接口和映射文件在同一包中
+				 2、接口和映射文件名称完全一致
+			 -->
+		<package name="dev.huang.dao"/>
+	 </mappers>
+</configuration>
